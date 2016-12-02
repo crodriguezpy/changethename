@@ -18,59 +18,73 @@
       
     <link href="css/starter-template.css" rel="stylesheet">
       
+      
+    <script src="js/tagauto/jquery.js"></script>
+      
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      
+    <script src="js/tagauto/bootstrap-typeahead.js"></script>
+    <script src="js/tagauto/rangy-core.js"></script>
+    <script src="js/tagauto/caret-position.js"></script>
+    <script src="js/tagauto/bootstrap-tagautocomplete.js"></script>
+      
+      
+      
   </head>
   <body>
-      
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#">Research Platform</a>
-            </div>
-              
-            <div id="navbar" class="collapse navbar-collapse">
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-              </ul>
-              <form class="navbar-form navbar-right">
-                  <div class="form-group">
-                    <input type="text" placeholder="Search..." class="form-control">
-                  </div>
-              </form>
-            </div><!--/.nav-collapse -->     
-              
-          </div>
-        
-    </nav>
-      
-    <nav class="navbar navbar-default">
-        
-      <div class="container">
-          <ul class="nav nav-pills center-pills">
-              <li role="presentation" class="active"><a href="#">All</a></li>            
-              <li role="presentation"><a href="#">Posts</a></li>
-              <li role="presentation"><a href="#">Questions&Answers</a></li>
-              <li role="presentation"><a href="#">Reviews</a></li>
-          </ul>
-      </div>
-        
-    </nav>
+    
+        <nav class="navbar navbar-inverse navbar-fixed-top">
 
+              <div class="container">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">Research Platform</a>
+                </div>
+
+                <div id="navbar" class="collapse navbar-collapse">
+                  <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                  </ul>
+                  <form class="navbar-form navbar-right">
+                      <div class="form-group">
+                        <input type="text" placeholder="Search..." class="form-control">
+                      </div>
+                  </form>
+                </div><!--/.nav-collapse -->     
+
+              </div>
+
+        </nav>
+
+        <nav class="navbar navbar-default">
+
+          <div class="container">
+              <ul class="nav nav-pills center-pills">
+                  <li role="presentation" class="active"><a href="#">All</a></li>            
+                  <li role="presentation"><a href="#">Posts</a></li>
+                  <li role="presentation"><a href="#">Questions&Answers</a></li>
+                  <li role="presentation"><a href="#">Reviews</a></li>
+              </ul>
+          </div>
+
+        </nav>
+
+      
     <div class="container">
       <div class="row">          
-        <div class="col-md-3"/></div>
+        <div class="col-md-3"></div>
         <div class="col-md-6">
           <div class="form-group">
+            
             <div>
-              <textarea class="form-control" rows="2" placeholder="post something..." required autofocus></textarea>
+              <textarea id="posttxt" class="form-control" style="resize:vertical;" rows="2"  placeholder="post something..." required autofocus></textarea>
             </div>
               
             <div>
@@ -86,7 +100,7 @@
             </div>            
             <div class="form-group">
               <br><br>
-              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="who should see this post?" id="usr">     
+              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="who should see this post? This post is public by default..." id="targetusers">     
             </div>
             <div>     
                 <br>
@@ -99,7 +113,7 @@
         </div>
         
         
-        <div class="col-md-3"/></div>
+        <div class="col-md-3"></div>
       </div>
       
       <div class="row">
@@ -133,7 +147,12 @@
                 <a href="#" title="vote/like"><img src="img/vote-icon.png"/></a>
               </div>         
             </div> 
-            <br>
+            
+            <div class="form-group">
+              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="write a comment...">     
+            </div>
+            
+            <br><br>
             <hr/>
         </div>
           
@@ -168,10 +187,14 @@
                 <a href="#" title="follow"><img src="img/follow-icon.png"/></a>
                 <a href="#" title="re-post"><img src="img/repost-icon.png"/></a>                
                 <a href="#" title="comment"><img src="img/comment-icon.png"/></a>
-                <a href="#" title="vote/like"><img src="img/vote-icon.png"/></a>
+                <a href="#" title="interesting!"><img src="img/interest-icon.png"/></a>
               </div>         
             </div>  
-            <br>
+            <div class="form-group">
+              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="write a comment...">     
+            </div>
+            
+            <br><br>
             <hr/>
         </div>
           
@@ -281,7 +304,11 @@
                 <a href="#" title="vote/like"><img src="img/vote-icon.png"/></a>
               </div>         
             </div> 
-            <br>
+            <div class="form-group">
+              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="write a comment..." >     
+            </div>
+            
+            <br><br>
             <hr/>
         </div>
           
@@ -301,7 +328,7 @@
           
         <div class="col-md-5">
             <div>
-              <span class="label label-warning">John asked</span>
+              <span class="label label-success">John asked</span>
             </div>
             <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae magna eleifend, imperdiet urna ac, faucibus odio. Nullam porta blandit metus et imperdiet. Nunc quis enim et nisi hendrerit accumsan sed in mauris. Maecenas non facilisis felis, a dapibus purus.
@@ -319,7 +346,11 @@
                 <a href="#" title="vote/like"><img src="img/vote-icon.png"/></a>
               </div>         
             </div> 
-            <br>
+            <div class="form-group">
+              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="write a comment..." >     
+            </div>
+            
+            <br><br>
             <hr/>
         </div>
           
@@ -354,10 +385,14 @@
                 <a href="#" title="follow"><img src="img/follow-icon.png"/></a>
                 <a href="#" title="re-post"><img src="img/repost-icon.png"/></a>                
                 <a href="#" title="comment"><img src="img/comment-icon.png"/></a>
-                <a href="#" title="vote/like"><img src="img/vote-icon.png"/></a>
+                <a href="#" title="interesting!"><img src="img/interest-icon.png"/></a>
               </div>         
             </div>  
-            <br>
+            <div class="form-group">
+              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="write a comment..." >     
+            </div>
+            
+            <br><br>
             <hr/>
         </div>
           
@@ -377,7 +412,7 @@
           
         <div class="col-md-5">
             <div>
-              <span class="label label-info">John requested a review</span>
+              <span class="label label-warning">John requested a review</span>
             </div>
             <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae magna eleifend, imperdiet urna ac, faucibus odio. Nullam porta blandit metus et imperdiet. Nunc quis enim et nisi hendrerit accumsan sed in mauris. 
@@ -467,7 +502,11 @@
                 <a href="#" title="vote/like"><img src="img/vote-icon.png"/></a>
               </div>         
             </div> 
-            <br>
+            <div class="form-group">
+              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="write a comment..." >     
+            </div>
+            
+            <br><br>
             <hr/>
         </div>
           
@@ -477,19 +516,28 @@
     
     
     
-    </div><!-- /.container -->
+    </div><!-- end of containder div -->
       
-    <!--
-    <footer class="footer">
-      <div class="container">
-         <p class="text-muted">Place sticky footer content here.</p> 
-      </div>
-    </footer>      
-    -->
-      
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        
     <script src="js/bootstrap.min.js"></script>
     <script src="js/commons.js"></script>
     <script src="js/mainfeed.js"></script>
+      
+    <script>
+        $('#posttxt').tagautocomplete({
+                      source: ['@boualem', '@carlos', '@fabio', '@moshe', '#crowdsourcing', '#research', '#soc'],
+                      character: '@#', //accept both @ and #
+                      after: function () {} //to run after selection  
+                    });
+        
+        $('#targetusers').tagautocomplete({
+                      source: ['@boualem', '@carlos', '@fabio', '@moshe'],
+                      character: '@', //accept both @ and #
+                      after: function () {} //to run after selection  
+                    });
+            
+    </script>
+      
+   </div>
   </body>
 </html>
