@@ -1,0 +1,137 @@
+swagger: '2.0'
+
+
+info:
+  description: This is an API for ResearchXXX
+  version: 1.0.0
+  title: ResearchXXX API
+  # put the contact info for your development or API team
+  contact:
+    email: you@your-company.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# all paths will be relative to the basePath specified
+# basePath: /v1
+
+# tags are used for organizing operations
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: guests
+  description: Operations available to all visitorts
+- name: loggedin
+  description: Operations available to registered users
+- name: apps
+  description: Operations that require a app access key
+schemes:
+- https
+
+host: api.xxx.net
+produces:
+  - application/json
+consumes:
+  - application/json
+
+paths:
+  /users:
+    get:
+      tags: 
+      - admins 
+      summary: gets all users (or a subset) depending on the query parameters
+      operationId: getUsers
+      description: gets all users (or a subset) depending on the query parameters
+            - application/json
+      parameters:
+      - in: query
+        name: searchString
+        description: pass an optional search string for looking up users
+        required: false
+        type: string
+      - in: query
+        name: skip
+        description: number of records to skip for pagination
+        type: integer
+        format: int32
+        minimum: 0
+      - in: query
+        name: limit
+        description: maximum number of records to return
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 50
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        400:
+          description: bad input parameter
+  
+
+#needs post, put delete
+
+  /users/{user-id}:
+#    parameters:
+ #     - $ref: '#/parameters/user-id'
+
+
+  /post:
+
+  /post/{post-id}:
+
+  #needs get post, put delete
+
+# these are actions, not resources or content. Used the "call" API.
+#they do not correspond to things that we want "indexed".
+
+  /call/followUser:
+  /call/unfollowUser:
+  /call/followPost:
+  /call/unfollowPost:
+  /call/getTags:
+  /call/flagPost: #(can be flag, vote, etc...)
+
+
+
+definitions:
+  User:
+    type: object
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      name:
+        type: string
+        example: John Smith
+      someOtherThing:
+        $ref: '#/definitions/Somethingelse'  
+  
+  Somethingelse:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d291f1ee-6c54-4b01-90e6-d701748f0851
+  
+  
+  
+parameters:
+  user-id:
+    name: user-id
+    in: path
+    description: The user identifier number
+    type: string
+
+  

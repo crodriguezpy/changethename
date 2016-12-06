@@ -16,10 +16,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
       
-    <link href="css/starter-template.css" rel="stylesheet">
-      
-      
-    <script src="js/tagauto/jquery.js"></script>
+    <link href="css/starter-template.css" rel="stylesheet">      
       
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
       
@@ -28,53 +25,52 @@
     <script src="js/tagauto/caret-position.js"></script>
     <script src="js/tagauto/bootstrap-tagautocomplete.js"></script>
       
-      
-      
   </head>
+    
   <body>
     
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-
-              <div class="container">
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#">Research Platform</a>
-                </div>
-
-                <div id="navbar" class="collapse navbar-collapse">
-                  <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                  </ul>
-                  <form class="navbar-form navbar-right">
-                      <div class="form-group">
-                        <input type="text" placeholder="Search..." class="form-control">
-                      </div>
-                  </form>
-                </div><!--/.nav-collapse -->     
-
-              </div>
-
-        </nav>
-
-        <nav class="navbar navbar-default">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
 
           <div class="container">
-              <ul class="nav nav-pills center-pills">
-                  <li role="presentation" class="active"><a href="#">All</a></li>            
-                  <li role="presentation"><a href="#">Posts</a></li>
-                  <li role="presentation"><a href="#">Questions&Answers</a></li>
-                  <li role="presentation"><a href="#">Reviews</a></li>
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Research Platform</a>
+            </div>
+
+            <div id="navbar" class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
               </ul>
+              <form class="navbar-form navbar-right">
+                  <div class="form-group">
+                    <input type="text" placeholder="Search..." class="form-control">
+                  </div>
+              </form>
+            </div><!--/.nav-collapse -->     
+
           </div>
 
-        </nav>
+    </nav>
+
+    <nav class="navbar navbar-default">
+
+      <div class="container">
+          <ul class="nav nav-pills center-pills">
+              <li role="presentation" class="active"><a href="#">All</a></li>            
+              <li role="presentation"><a href="#">Posts</a></li>
+              <li role="presentation"><a href="#">Questions&Answers</a></li>
+              <li role="presentation"><a href="#">Reviews</a></li>
+          </ul>
+      </div>
+
+    </nav>
 
       
     <div class="container">
@@ -83,37 +79,52 @@
         <div class="col-md-6">
           <div class="form-group">
             
-            <div>
-              <textarea id="posttxt" class="form-control" style="resize:vertical;" rows="2"  placeholder="post something..." required autofocus></textarea>
+            <div class="row">
+              <div class="col-md-12 pull-left">
+                <textarea id="posttxt" class="form-control" style="resize:vertical;" rows="2"  placeholder="write your post here..." required autofocus></textarea>                
+              </div>              
             </div>
               
-            <div>
-              <br>
-              <div class="pull-left">
-                <button id="postbtn" type="button" class="btn btn-info">post</button>
-                <button id="questionbtn" type="button" class="btn btn-secondary">question</button>
-                <button id="reviewbtn" type="button" class="btn btn-secondary">review</button>
-              </div>
-                            
-              <div id="postoptions" class="pull-right"></div>                
-                
-            </div>            
-            <div class="form-group">
-              <br><br>
-              <input type="text" class="form-control pull-left" data-role="tagsinput" placeholder="who should see this post? This post is public by default..." id="targetusers">     
-            </div>
-            <div>     
+            <!--
+            <div  class="row">
+              <div class="col-md-12 pull-left">
+                <textarea id="qdetails" class="form-control" style="resize:vertical;" rows="2"  placeholder="add the details of your question here..." required autofocus></textarea>
                 <br>
-                <a class="btn btn-primary pull-right" href="#" role="button">send</a>
+              </div>              
+            </div>  
+            -->
+            <div class="row" style="height:10px; display:block;"></div>
+              
+            <div class="row">   
+              <div class="col-md-6 pull-left" style="padding-top: 5px;">
+                <button id="postbtn" type="button" class="btn btn-info btn-sm">post</button>
+                <button id="questionbtn" type="button" class="btn btn-secondary btn-sm">question</button>
+                <button id="reviewbtn" type="button" class="btn btn-secondary btn-sm">review</button>
+              </div> 
+              
+              <div class="col-md-6 form-group pull-left" style="padding-top: 5px;">                
+                <input type="text" class="form-control" data-role="tagsinput" placeholder="who should see this post?" id="targetusers">   
+              </div>                           
+            </div>                            
+              
+            <div class="row">                
+              <div id="postoptions" style="height:20px; display:block;">
+                
+              </div>
             </div>
-            <br>
+              
+            <div class="row"> 
+                <div class="col-md-12">
+                  <a class="btn btn-primary pull-right" href="#" role="button">send</a>
+                </div>
+            </div>              
             <hr/>
           </div>
           
-        </div>
-        
+        </div>        
         
         <div class="col-md-3"></div>
+          
       </div>
       
       <div class="row">
