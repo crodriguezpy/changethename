@@ -1,110 +1,498 @@
+---
 swagger: '2.0'
-
-
 info:
-  description: This is an API for ResearchXXX
-  version: 1.0.0
-  title: ResearchXXX API
-  # put the contact info for your development or API team
+  description: 'This is an API for ResearchXXX'
+  version: '1.0.0'
+  title: 'ResearchXXX API'
   contact:
-    email: you@your-company.com
-
+    email: 'you@your-company.com'
   license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-
-# all paths will be relative to the basePath specified
-# basePath: /v1
-
-# tags are used for organizing operations
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: guests
-  description: Operations available to all visitorts
-- name: loggedin
-  description: Operations available to registered users
-- name: apps
-  description: Operations that require a app access key
+  - name: 'admins'
+    description: 'Secured Admin-only calls'
+  - name: 'guests'
+    description: 'Operations available to all visitorts'
+  - name: 'loggedin'
+    description: 'Operations available to registered users'
+  - name: 'accountOwner'
+    description: 'Operations available to account owners'
+  - name: 'postOwner'
+    description: 'Operations available to post owners'
+  - name: 'apps'
+    description: 'Operations that require an app access key'
 schemes:
-- https
-
-host: api.xxx.net
+  - 'https'
+host: 
+  - 'api.xxx.net'
 produces:
-  - application/json
+  - 'application/json'
 consumes:
-  - application/json
-
+  - 'application/json'
 paths:
   /users:
     get:
-      tags: 
-      - admins 
-      summary: gets all users (or a subset) depending on the query parameters
-      operationId: getUsers
-      description: gets all users (or a subset) depending on the query parameters
-            - application/json
+      tags:
+        - 'admins'
+        - 'loggedin'
+      summary: 'Gets all users (or a subset) depending on the query parameters'
+      operationId: 'getUsers'
+      description: 'gets all users (or a subset) depending on the query parameters'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
       parameters:
-      - in: query
-        name: searchString
-        description: pass an optional search string for looking up users
-        required: false
-        type: string
-      - in: query
-        name: skip
-        description: number of records to skip for pagination
-        type: integer
-        format: int32
-        minimum: 0
-      - in: query
-        name: limit
-        description: maximum number of records to return
-        type: integer
-        format: int32
-        minimum: 0
-        maximum: 50
+        - in: 'query'
+          name: 'searchString'
+          description: 'Pass an optional search string for looking up users'
+          required: false
+          type: 'string'
+        - in: 'query'
+          name: 'skip'
+          description: 'Number of records to skip for pagination'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+        - in: 'query'
+          name: 'limit'
+          description: 'Maximum number of records to return'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+          maximum: 50
       responses:
         200:
-          description: search results matching criteria
+          description: 'Successful operation'
           schema:
-            type: array
+            type: 'array'
             items:
               $ref: '#/definitions/User'
         400:
-          description: bad input parameter
+          description: 'Bad input parameter'
   
-
-#needs post, put delete
-
-  /users/{user-id}:
-#    parameters:
- #     - $ref: '#/parameters/user-id'
-
-
+  /user:
+    post:
+      tags:
+        - 'admins'
+      summary: 'Creates a new user'
+      description: 'Creates a new user'
+      operationId: 'createUser'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Created user object'
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        201:
+          description: 'User created successfuly'
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: 'Bad input parameters'
+        500:
+          description: 'User could not be created'
+  
+  /user/{userId}:
+    get:
+      tags:
+        - 'admins'
+        - 'loggedin'
+      summary: 'Find user by ID'
+      description: 'Returns a single user'
+      operationId: 'getUserById'
+      produces: 
+        - 'application/json'
+      parameters:
+        - name: 'userId'
+          in: "path"
+          description: 'ID of user to return'
+          required: true
+          type: 'string'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'User not found'
+    put:
+      tags:
+        - 'admins'
+        - 'accountOwner'
+      summary: 'Updated user'
+      description: 'This can be done only by logged users and admins'
+      operationId: 'updateUser'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'User ID that needs to be updated'
+          required: true
+          type: 'string'
+        - in: 'body'
+          name: 'body'
+          description: 'Updated user object'
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/User'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'User not found'
+        500:
+          description: 'Server error. User could not be updated'
+    delete:
+      tags:
+        - 'admins'
+        - 'accountOwner'
+      summary: 'Delete a user'
+      description: 'This can be done only by logged users and admins'
+      operationId: 'deleteUser'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'The User Id that needs to be deleted'
+          required: true
+          type: 'string'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/User'
+        401:
+          description: 'User not found'
+        500:
+          description: 'Server error. User could not be deleted'
+        
+  /user/{userId}/follower:
+    put:
+        tags:
+          - 'loggedin'
+        summary: 'Adds a follower to userId'
+        description: 'Adds a follower to userId'
+        operationId: 'addFollowerToUser'
+        produces:
+          - 'application/json'
+        parameters:
+          - name: 'userId'
+            in: "path"
+            description: 'ID of the followee'
+            required: true
+            type: 'string'
+          - name: 'followerUserId'
+            in: 'query'
+            description: 'ID of the follower'
+            required: true
+            type: 'string'
+        responses:
+          200:
+            description: 'Successful operation'
+          400:
+            description: 'Bad input parameters'
+          404:
+            description: 'Follower or followee not found'
+          500:
+            description: 'Following relationship could not established'
+    delete:
+      tags:
+        - 'loggedin'
+      summary: 'Deletes a follower from userId'
+      description: 'This can be done only by logged users'
+      operationId: 'deleteFollowerFromUser'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'userId'
+          in: 'path'
+          description: 'ID of the followee'
+          required: true
+          type: 'string'
+        - name: 'followerUserId'
+            in: 'query'
+            description: 'ID of the follower'
+            required: true
+            type: 'string'
+      responses:
+        200:
+          description: 'Successful operation'
+        401:
+          description: 'Follower or followee not found'
+        500:
+          description: 'Following relationship could not be deleted'
+  
+  /posts:
+    get:
+      tags:
+        - 'admins'
+        - 'guests'
+        - 'loggedin'
+      summary: 'Gets all posts (or a subset) depending on the query parameters'
+      operationId: 'getPosts'
+      description: 'Gets all posts (or a subset) depending on the query parameters'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'query'
+          name: 'searchString'
+          description: 'Pass an optional search string for looking up posts'
+          required: false
+          type: 'string'
+        - in: 'query'
+          name: 'skip'
+          description: 'Number of records to skip for pagination'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+        - in: 'query'
+          name: 'limit'
+          description: 'Maximum number of records to return'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+          maximum: 50
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Post'
+        400:
+          description: 'Bad input parameter'
+  
   /post:
-
-  /post/{post-id}:
-
-  #needs get post, put delete
-
-# these are actions, not resources or content. Used the "call" API.
-#they do not correspond to things that we want "indexed".
-
-  /call/followUser:
-  /call/unfollowUser:
-  /call/followPost:
-  /call/unfollowPost:
-  /call/getTags:
-  /call/flagPost: #(can be flag, vote, etc...)
-
-
-
+    post:
+      tags:
+        - 'loggedin'
+      summary: 'Creates a post'
+      description: 'Creates a post'
+      operationId: 'createPost'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'body'
+          description: 'Created post object'
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        201:
+          description: 'Post created successfuly'
+          schema:
+            $ref: '#/definitions/Post'
+        400:
+          description: 'Bad input parameters'
+        500:
+          description: 'Post could not be created'
+  
+  /post/{postId}:
+    get:
+      tags:
+        - 'admins'
+        - 'loggedin'
+      summary: 'Find post by ID'
+      description: 'Returns a single post'
+      operationId: 'getPostById'
+      produces: 
+        - 'application/json'
+      parameters:
+        - name: 'postId'
+          in: "path"
+          description: 'ID of post to return'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/Post'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'Post not found'
+    
+    #notice that flagging a post is done by updating the attribute flagged=true
+    put:
+      tags:
+        - 'postOwner'
+      summary: 'Updated post'
+      description: 'This can be done only by post owners'
+      operationId: 'updatePost'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'postId'
+          in: 'path'
+          description: 'Post ID that needs to be updated'
+          required: true
+          type: 'string'
+        - in: 'body'
+          name: 'body'
+          description: 'Updated post object'
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/Post'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'Post not found'
+        500:
+          description: 'Server error. Post could not be updated'
+          
+    delete:
+      tags:
+        - 'admins'
+        - 'postOwner'
+      summary: 'Delete a post'
+      description: 'This can be done only by post owners'
+      operationId: 'deletePost'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'postId'
+          in: 'path'
+          description: 'The Post Id that needs to be deleted'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/Post'
+        401:
+          description: 'User not found'
+        500:
+          description: 'Server error. User could not be deleted'
+  
+  /post/{postId}/follower:
+    put:
+        tags:
+          - 'loggedin'
+        summary: 'Adds a follower to postId'
+        description: 'Adds a follower to postId'
+        operationId: 'addFollowerToPost'
+        produces:
+          - 'application/json'
+        parameters:
+          - name: 'postId'
+            in: "path"
+            description: 'ID of the followed post'
+            required: true
+            type: 'string'
+          - name: 'followerUserId'
+            in: 'query'
+            description: 'ID of the follower'
+            required: true
+            type: 'string'
+        responses:
+          200:
+            description: 'Successful operation'
+          400:
+            description: 'Bad input parameters'
+          404:
+            description: 'Follower or post not found'
+          500:
+            description: 'Following relationship could not established'
+    delete:
+      tags:
+        - 'loggedin'
+      summary: 'Deletes a follower from postId'
+      description: 'This can be done only by logged users'
+      operationId: 'deleteFollowerFromPost'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'postId'
+          in: 'path'
+          description: 'ID of the followed post'
+          required: true
+          type: 'string'
+        - name: 'followerUserId'
+            in: 'query'
+            description: 'ID of the follower'
+            required: true
+            type: 'string'
+      responses:
+        200:
+          description: 'Successful operation'
+        401:
+          description: 'Follower or post not found'
+        500:
+          description: 'Following relationship could not be deleted'
+  
+  /tags
+    get:
+      tags:
+        - 'admins'
+        - 'guests'
+      summary: 'Gets all tags (or a subset) depending on the query parameters'
+      operationId: 'getTags'
+      description: 'gets all tags (or a subset) depending on the query parameters'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'query'
+          name: 'searchString'
+          description: 'Pass an optional search string for looking up tags'
+          required: false
+          type: 'string'
+        - in: 'query'
+          name: 'skip'
+          description: 'Number of records to skip for pagination'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+        - in: 'query'
+          name: 'limit'
+          description: 'Maximum number of records to return'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+          maximum: 50
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Tag'
+        400:
+          description: 'Bad input parameter'
+  
 definitions:
   User:
     type: object
     required:
-    - id
-    - name
+      - id
+      - name
     properties:
       id:
         type: string
@@ -113,25 +501,19 @@ definitions:
         type: string
         example: John Smith
       someOtherThing:
-        $ref: '#/definitions/Somethingelse'  
-  
+        $ref: '#/definitions/Somethingelse'
   Somethingelse:
-      type: object
-      required:
+    type: object
+    required:
       - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: d291f1ee-6c54-4b01-90e6-d701748f0851
-  
-  
-  
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d291f1ee-6c54-4b01-90e6-d701748f0851
 parameters:
   user-id:
     name: user-id
     in: path
     description: The user identifier number
     type: string
-
-  
