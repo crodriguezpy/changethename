@@ -38,9 +38,7 @@ paths:
         - 'loggedin'
       summary: 'Gets all users (or a subset) depending on the query parameters'
       operationId: 'getUsers'
-      description: 'gets all users (or a subset) depending on the query parameters'
-      consumes:
-        - 'application/json'
+      description: 'Gets all users (or a subset) depending on the query parameters. This operation is available to admins and logged-in users'
       produces:
         - 'application/json'
       parameters:
@@ -70,15 +68,19 @@ paths:
             items:
               $ref: '#/definitions/User'
         400:
-          description: 'Bad input parameter'
+          description: 'Bad input parameters'
+        404:
+          description: 'No users found'
   
   /user:
     post:
       tags:
         - 'admins'
       summary: 'Creates a new user'
-      description: 'Creates a new user'
+      description: 'Creates a new user. This operation is available only to admins.'
       operationId: 'createUser'
+      consumes:
+        - 'application/json'
       produces:
         - 'application/json'
       parameters:
@@ -101,8 +103,8 @@ paths:
       tags:
         - 'admins'
         - 'loggedin'
-      summary: 'Find user by ID'
-      description: 'Returns a single user'
+      summary: 'Find a user by ID'
+      description: 'Find a user by ID. This operation is available only to logged-in users and admins.'
       operationId: 'getUserById'
       produces: 
         - 'application/json'
@@ -125,8 +127,8 @@ paths:
       tags:
         - 'admins'
         - 'accountOwner'
-      summary: 'Updates user'
-      description: 'This can be done only by logged users and admins'
+      summary: 'Updates a user.'
+      description: 'Updates a user. This operation is accessible only to logged-in users and admins.'
       operationId: 'updateUser'
       produces:
         - 'application/json'
@@ -156,8 +158,8 @@ paths:
       tags:
         - 'admins'
         - 'accountOwner'
-      summary: 'Delete a user'
-      description: 'This can be done only by logged users and admins'
+      summary: 'Deletes a user'
+      description: 'Deletes a user. This operation is available only to logged-in users and admins.'
       operationId: 'deleteUser'
       produces:
         - 'application/json'
@@ -172,63 +174,11 @@ paths:
           description: 'Successful operation'
           schema:
             $ref: '#/definitions/User'
+        400:
+          description: 'Bad input parameter'
         404:
           description: 'User not found'
 
-        
-  /user/{userId}/follower:
-    put:
-        tags:
-          - 'loggedin'
-        summary: 'Adds a follower to userId'
-        description: 'Adds a follower to userId'
-        operationId: 'addFollowerToUser'
-        produces:
-          - 'application/json'
-        parameters:
-          - name: 'userId'
-            in: "path"
-            description: 'ID of the followee'
-            required: true
-            type: 'string'
-          - name: 'followerUserId'
-            in: 'query'
-            description: 'ID of the follower'
-            required: true
-            type: 'string'
-        responses:
-          200:
-            description: 'Successful operation'
-          400:
-            description: 'Bad input parameters'
-          404:
-            description: 'Follower or followee not found'
-
-    delete:
-      tags:
-        - 'loggedin'
-      summary: 'Deletes a follower from userId'
-      description: 'This can be done only by logged users'
-      operationId: 'deleteFollowerFromUser'
-      produces:
-        - 'application/json'
-      parameters:
-        - name: 'userId'
-          in: 'path'
-          description: 'ID of the followee'
-          required: true
-          type: 'string'
-        - name: 'followerUserId'
-          in: 'query'
-          description: 'ID of the follower'
-          required: true
-          type: 'string'
-      responses:
-        200:
-          description: 'Successful operation'
-        404:
-          description: 'Follower or followee not found'
-  
   /posts:
     get:
       tags:
@@ -237,9 +187,7 @@ paths:
         - 'loggedin'
       summary: 'Gets all posts (or a subset) depending on the query parameters'
       operationId: 'getPosts'
-      description: 'Gets all posts (or a subset) depending on the query parameters'
-      consumes:
-        - 'application/json'
+      description: 'Gets all posts (or a subset) depending on the query parameters. This operation is accessible to guests and logged-in users as well as to admins.'
       produces:
         - 'application/json'
       parameters:
@@ -270,20 +218,22 @@ paths:
               $ref: '#/definitions/Post'
         400:
           description: 'Bad input parameter'
+        404:
+          description: 'No posts found'
   
   /post:
     post:
       tags:
         - 'loggedin'
-      summary: 'Creates a post'
-      description: 'Creates a post'
+      summary: 'Creates a new post.'
+      description: 'Creates a new post. This operation is available only to logged-in users.'
       operationId: 'createPost'
       produces:
         - 'application/json'
       parameters:
         - in: 'body'
           name: 'body'
-          description: 'Created post object'
+          description: 'Created post object.'
           required: true
           schema:
             $ref: '#/definitions/Post'
@@ -300,8 +250,8 @@ paths:
       tags:
         - 'admins'
         - 'loggedin'
-      summary: 'Find post by ID'
-      description: 'Returns a single post'
+      summary: 'Find a post by ID.'
+      description: 'Find a post by ID. This operation is available only to logged-in users and admins.'
       operationId: 'getPostById'
       produces: 
         - 'application/json'
@@ -326,20 +276,21 @@ paths:
     put:
       tags:
         - 'postOwner'
-      summary: 'Updates post'
-      description: 'This can be done only by post owners'
+      summary: 'Updates a post'
+      description: 'Updates a post. This operation can be done only by the post owner.'
       operationId: 'updatePost'
       produces:
         - 'application/json'
       parameters:
         - name: 'postId'
-          in: 'path'
-          description: 'Post ID that needs to be updated'
+          in: "path"
+          description: 'ID of post to update.'
           required: true
-          type: 'string'
+          type: 'integer'
+          format: 'int64'
         - in: 'body'
           name: 'body'
-          description: 'Updated post object'
+          description: 'Updated post object.'
           required: true
           schema:
             $ref: '#/definitions/Post'
@@ -352,21 +303,19 @@ paths:
           description: 'Bad input parameters'
         404:
           description: 'Post not found'
-
-          
     delete:
       tags:
         - 'admins'
         - 'postOwner'
-      summary: 'Delete a post'
-      description: 'This can be done only by post owners'
+      summary: 'Deletes a post'
+      description: 'Deletes a post. This operation can be done only by the post owner.'
       operationId: 'deletePost'
       produces:
         - 'application/json'
       parameters:
         - name: 'postId'
-          in: 'path'
-          description: 'The Post Id that needs to be deleted'
+          in: "path"
+          description: 'ID of post to delete'
           required: true
           type: 'integer'
           format: 'int64'
@@ -375,28 +324,119 @@ paths:
           description: 'Successful operation'
           schema:
             $ref: '#/definitions/Post'
+        400:
+          description: 'Bad input parameters'
         404:
           description: 'Post not found'
 
-  
-  /post/{postId}/follower:
-    put:
+  /answer:
+    post:
         tags:
           - 'loggedin'
-        summary: 'Adds a follower to postId'
-        description: 'Adds a follower to postId'
-        operationId: 'addFollowerToPost'
+        summary: 'Adds an answer to a post of type=question'
+        description: 'Adds an answer to a post of type=question. This operation is available only to logged-in users.'
+        operationId: 'addAnswer'
+        consumes:
+          - 'application/json'
         produces:
           - 'application/json'
         parameters:
           - name: 'postId'
-            in: "path"
-            description: 'ID of the followed post'
+            in: "query"
+            description: 'ID of post to which the answer is added'
+            required: true
+            type: 'integer'
+            format: 'int64'
+          - in: 'body'
+            name: 'body'
+            description: 'Created answer object'
+            required: true
+            schema:
+              $ref: '#/definitions/Answer'
+        responses:
+          200:
+            description: 'Successful operation'
+            schema:
+              $ref: '#/definitions/Answer'
+          400:
+            description: 'Bad input parameters'
+
+            
+  /answer/{answerId}:
+    put:
+      tags:
+        - 'postOwner' #answer owner, in this case
+      summary: 'Updates an answer.'
+      description: 'Updates an answer. This can be done only by the owner of the answer.'
+      operationId: 'updateAnswer'
+      consumes:
+        - 'application/json'
+      parameters:
+        - name: 'answerId'
+          in: "path"
+          description: 'ID of answer to update.'
+          required: true
+          type: 'integer'
+          format: 'int64'
+        - in: 'body'
+          name: 'body'
+          description: 'Updated answer object.'
+          required: true
+          schema:
+            $ref: '#/definitions/Answer'
+      responses:
+        200:
+          description: 'Successful operation'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'Answer not found'
+    delete:
+      tags:
+        - 'admins'
+        - 'postOwner'
+      summary: 'Deletes an answer.'
+      description: 'Deletes an answer. This can be done only by the owner of the answer and admins.'
+      operationId: 'deleteAnswer'
+      parameters:
+        - name: 'answerId'
+          in: "path"
+          description: 'ID of answer to delete'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'Successful operation'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'Answer not found'
+  
+  /follower:
+    post:
+        tags:
+          - 'loggedin'
+        summary: 'Adds a follower to a post or user.'
+        description: 'Adds a follower to a post or user. This operation is available only to logged-in users.'
+        operationId: 'addFollower'
+        parameters:
+          - name: 'followedType'
+            in: "query"
+            description: 'Type of object to follow ("user" or "post").'
+            required: true
+            type: 'string'
+            enum:
+              - 'user'
+              - 'post'
+          - name: 'followedId'
+            in: "query"
+            description: 'ID of the followed object.'
             required: true
             type: 'string'
           - name: 'followerUserId'
             in: 'query'
-            description: 'ID of the follower'
+            description: 'ID of the follower.'
             required: true
             type: 'string'
         responses:
@@ -404,44 +444,369 @@ paths:
             description: 'Successful operation'
           400:
             description: 'Bad input parameters'
-          404:
-            description: 'Follower or post not found'
 
     delete:
       tags:
         - 'loggedin'
-      summary: 'Deletes a follower from postId'
-      description: 'This can be done only by logged users'
-      operationId: 'deleteFollowerFromPost'
-      produces:
-        - 'application/json'
+      summary: 'Deletes a follower from user or post'
+      description: 'Deletes a follower from user or post. This can be done only by logged-in users.'
+      operationId: 'deleteFollower'
       parameters:
-        - name: 'postId'
-          in: 'path'
-          description: 'ID of the followed post'
+        - name: 'followedType'
+          in: "query"
+          description: 'Type of object to follow ("user" or "post").'
+          required: true
+          type: 'string'
+          enum:
+            - 'user'
+            - 'post'
+        - name: 'followedId'
+          in: "query"
+          description: 'ID of the followed object.'
           required: true
           type: 'string'
         - name: 'followerUserId'
           in: 'query'
-          description: 'ID of the follower'
+          description: 'ID of the follower.'
           required: true
           type: 'string'
       responses:
         200:
           description: 'Successful operation'
+        400:
+          description: 'Bad input parameter'
         404:
-          description: 'Follower or post not found'
+          description: 'Following relationship not found'
   
+  /comments:
+    get:
+      tags:
+        - 'loggedin'
+      summary: 'Gets all comments (or a subset) depending on the query parameters.'
+      operationId: 'getComments'
+      description: 'Gets all comments (or a subset) depending on the query parameters. This operation is available only to logged-in users.'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'query'
+          name: 'postType'
+          description: 'Pass an optional post type where to look for comments.'
+          required: false
+          type: 'string'
+          enum:
+            - 'tweet'
+            - 'question'
+            - 'reply'
+            - 'request'
+            - 'review'
+        - in: 'query'
+          name: 'searchString'
+          description: 'Pass an optional search string for looking up comments'
+          required: false
+          type: 'string'
+        - in: 'query'
+          name: 'skip'
+          description: 'Number of records to skip for pagination'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+        - in: 'query'
+          name: 'limit'
+          description: 'Maximum number of records to return'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+          maximum: 50
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Comment'
+        400:
+          description: 'Bad input parameter'
+        404:
+          description: 'No comments found'
+
+  /comment:
+    post:
+        tags:
+          - 'loggedin'
+        summary: 'Adds a comment to a tweet, question, answer or review request.'
+        description: 'Adds a comment to a tweet, question, answer or review request. This operation is available only to logged-in usrers.'
+        operationId: 'addComment'
+        consumes:
+          - 'application/json'        
+        produces:
+          - 'application/json'
+        parameters:
+          - name: 'postId'
+            in: "query"
+            description: 'ID of post to which the answer is added.'
+            required: true
+            type: 'integer'
+            format: 'int64'
+          - name: 'postType'          
+            in: 'query'
+            description: 'Type of post to which the answer is adde.'
+            type: 'string'
+            enum:
+              - 'tweet'
+              - 'question'
+              - 'answer'
+              - 'request'
+              - 'review'
+          - in: 'body'
+            name: 'body'
+            description: 'Created comment object.'
+            required: true
+            schema:
+              $ref: '#/definitions/Comment'
+        responses:
+          200:
+            description: 'Successful operation'
+            schema:
+              $ref: '#/definitions/Comment' #Created comment with assigned ID
+          400:
+            description: 'Bad input parameters'
+    
+  /comment/{commentId}:
+    get:
+      tags:
+        - 'loggedin'
+      summary: 'Find a comment by ID.'
+      description: 'Find a comment by ID. This operation is available only to logged-in users.'
+      operationId: 'getCommentById'
+      produces: 
+        - 'application/json'
+      parameters:
+        - name: 'commentId'
+          in: "path"
+          description: 'ID of comment to return.'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/Comment'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'Comment not found'
+    put:
+        tags:
+          - 'postOwner' #Owner of the comment
+        summary: 'Updates a comment.'
+        description: 'Updates a comment. This operation is available only to the comment owner.'
+        operationId: 'updateComment'
+        consumes:
+          - 'application/json'
+        parameters:
+          - name: 'commentId'
+            in: "path"
+            description: 'ID of comment to update.'
+            required: true
+            type: 'integer'
+            format: 'int64'
+          - in: 'body'
+            name: 'body'
+            description: 'Updated comment object.'
+            required: true
+            schema:
+              $ref: '#/definitions/Comment'
+        responses:
+          200:
+            description: 'Successful operation'
+          400:
+            description: 'Bad input parameters'
+          404:
+            description: 'Comment not found'  
+    delete:
+      tags:
+        - 'admins'
+        - 'postOwner' #Owner of the comment
+      summary: 'Deletes a comment.'
+      description: 'Deletes a comment. This operation is available only to comment owners.'
+      operationId: 'deleteComment'
+      parameters:
+        - name: 'commentId'
+          in: "path"
+          description: 'ID of comment to delete.'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'Successful operation'
+        400:
+            description: 'Bad input parameters'
+        404:
+          description: 'Comment not found'
+
+  /reviews:
+    get:
+      tags:
+        - 'loggedin'
+      summary: 'Gets all reviews (or a subset) depending on the query parameters.'
+      operationId: 'getReviews'
+      description: 'Gets all reviews (or a subset) depending on the query parameters. This operation is available only to logged-in users.'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'query'
+          name: 'requestPostId'
+          description: 'Pass an optional post ID of the review request from where search for reviews.'
+          required: false
+          type: 'integer'
+          format: 'int64'
+        - in: 'query'
+          name: 'searchString'
+          description: 'Pass an optional search string for looking up reviews'
+          required: false
+          type: 'string'
+        - in: 'query'
+          name: 'skip'
+          description: 'Number of records to skip for pagination'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+        - in: 'query'
+          name: 'limit'
+          description: 'Maximum number of records to return'
+          type: 'integer'
+          format: 'int32'
+          minimum: 0
+          maximum: 50
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Review'
+        400:
+          description: 'Bad input parameter'
+        404:
+          description: 'No reviews found'
+  
+  /review:
+    post:
+        tags:
+          - 'loggedin'
+        summary: 'Adds a review to a review request.'
+        description: 'Adds a review to a review request. This operation is available only to logged-in users.'
+        operationId: 'addReview'
+        produces:
+          - 'application/json'
+        consumes:
+          - 'application/json'
+        parameters:
+          - name: 'postId'
+            in: "query"
+            description: 'ID of post (review request) to which the review is added.'
+            required: true
+            type: 'integer'
+            format: 'int64'
+          - in: 'body'
+            name: 'body'
+            description: 'Created review object.'
+            required: true
+            schema:
+              $ref: '#/definitions/Review'
+        responses:
+          200:
+            description: 'Successful operation'
+            schema:
+              $ref: '#/definitions/Review' #Created review object with assigned ID
+          400:
+            description: 'Bad input parameters'
+    
+  /review/{reviewId}:
+    get:
+      tags:
+        - 'loggedin'
+      summary: 'Find review by ID.'
+      description: 'Find review by ID. This operation is available only to logged-in users.'
+      operationId: 'getReviewById'
+      produces: 
+        - 'application/json'
+      parameters:
+        - name: 'reviewId'
+          in: "path"
+          description: 'ID of review to return'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/Review'
+        400:
+          description: 'Bad input parameters'
+        404:
+          description: 'Review not found'
+    put:
+        tags:
+          - 'reviewOwner' #Owner of the review
+        summary: 'Updates a review.'
+        description: 'Updates a review. This operation is available only to review owners.'
+        operationId: 'updateReview'
+        consumes:
+          - 'application/json'
+        parameters:
+          - name: 'reviewId'
+            in: "path"
+            description: 'ID of review to update.'
+            required: true
+            type: 'integer'
+            format: 'int64'
+          - in: 'body'
+            name: 'body'
+            description: 'Updated review object.'
+            required: true
+            schema:
+              $ref: '#/definitions/Review'
+        responses:
+          200:
+            description: 'Successful operation'
+          400:
+            description: 'Bad input parameters'
+          404:
+            description: 'Review not found'  
+    delete:
+      tags:
+        - 'admins'
+        - 'postOwner' #Owner of the comment
+      summary: 'Deletes a review.'
+      description: 'Deletes a review. This operation is available only to review owners.'
+      operationId: 'deleteReview'
+      parameters:
+        - name: 'reviewId'
+          in: "path"
+          description: 'ID of review to delete.'
+          required: true
+          type: 'integer'
+          format: 'int64'
+      responses:
+        200:
+          description: 'Successful operation'
+        400:
+            description: 'Bad input parameters'
+        404:
+          description: 'Review not found'
+
   /tags:
     get:
       tags:
         - 'admins'
         - 'guests'
-      summary: 'Gets all tags (or a subset) depending on the query parameters'
+      summary: 'Gets all tags (or a subset) depending on the query parameters.'
       operationId: 'getTags'
-      description: 'gets all tags (or a subset) depending on the query parameters'
-      consumes:
-        - 'application/json'
+      description: 'gets all tags (or a subset) depending on the query parameters. This operation is available to guests and admins.'
       produces:
         - 'application/json'
       parameters:
@@ -472,6 +837,8 @@ paths:
               $ref: '#/definitions/Tag'
         400:
           description: 'Bad input parameter'
+        404:
+          description: 'No tags found'
   
 definitions:
   User:
@@ -520,6 +887,19 @@ definitions:
       informalReview:
         type: 'boolean'
         default: false
+      reviewDeadline:
+        type: 'string' #format: dd/mm/yyyy
+        description: 'Deadline date in the format dd/mm/yyyy'
+        
+      #wheter the current user voted up or down
+      votedUp:
+        type: 'boolean'
+        default: false
+      votedDown: 
+        type: 'boolean'
+        default: false
+      
+      
       upVotes:
         type: 'integer'
         format: 'int32'
@@ -531,14 +911,19 @@ definitions:
         format: 'int32'
       flagged:
         type: 'boolean'
-      replies:
+      answers:
         type: 'array'
         items:
-          $ref: '#/definitions/Reply'
+          $ref: '#/definitions/Answer'
       comments:
         type: 'array'
         items:
           $ref: '#/definitions/Comment'
+      reviews:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Review'
+          
   Tag:
     type: object
     required:
@@ -547,7 +932,7 @@ definitions:
       name:
         type: 'string'
         example: 'crowdsourcing'
-  Comment:
+  Answer:
     type: object
     required:
       - 'id'
@@ -558,19 +943,7 @@ definitions:
         format: 'int64'
       text:
         type: 'string'
-        example: 'this is a comment...'
-  Reply:
-    type: object
-    required:
-      - 'id'
-      - 'text'
-    properties:
-      id:
-        type: 'integer'
-        format: 'int64'
-      text:
-        type: 'string'
-        example: 'this is a reply to our question...'
+        example: 'this is a answer to our question...'
       upVotes:
         type: 'integer'
         format: 'int32'
@@ -582,4 +955,51 @@ definitions:
       comments:
         type: 'array'
         items:
-          $ref: '#/definitions/Comment'        
+          $ref: '#/definitions/Comment'
+  Comment:
+    type: object
+    required:
+      - 'id'
+      - 'postType'
+      - 'postId'
+      - 'text'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      postType:
+        type: 'string'
+      postId:
+        type: 'integer'
+        format: 'int64'
+      text:
+        type: 'string'
+        example: 'this is a comment...'
+        
+  Review:
+    type: object
+    required:
+      - id
+      - requestPostId
+      - reviewerId
+      - text
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      requestPostId:
+        type: 'integer'
+        format: 'int64'
+      reviewerId:
+        type: 'string'
+      text:
+        type: 'string'
+      scores:
+        type: 'string' #this can be represented as XML (or other representation)
+      comments:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Comment'
+        
+        
+        
