@@ -3,6 +3,9 @@ $( "#postbtn" ).click(function() {
         
     $("#posttxt").attr("placeholder", "write you post here...");
     
+    $("#questionDetails").addClass("hidden");
+    $("#reviewAbstract").addClass("hidden");
+    
     $( "#postbtn" ).addClass("btn btn-info btn-sm");
     $( "#questionbtn" ).addClass("btn btn-secondary btn-sm");
     $( "#reviewbtn" ).addClass("btn btn-secondary btn-sm");    
@@ -16,6 +19,9 @@ $( "#postbtn" ).click(function() {
 
 $( "#questionbtn" ).click(function() {
     removeClasses();
+    
+    $("#questionDetails").removeClass("hidden");
+    $("#reviewAbstract").addClass("hidden");
     
     $("#posttxt").attr("placeholder", "ask your question here...");
     
@@ -44,6 +50,9 @@ $( "#questionbtn" ).click(function() {
 
 $( "#reviewbtn" ).click(function() {
     removeClasses();
+    
+    $("#questionDetails").addClass("hidden");
+    $("#reviewAbstract").removeClass("hidden");
     
     $("#targetusers").removeAttr("disabled"); 
     
